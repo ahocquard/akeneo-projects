@@ -3,6 +3,11 @@
 ## Goal of this POC
 
 When displaying the category tree in the product grid, the number of products in each category should be displayed.
+We are currently trying to do it in real time.
+
+We try to avoid to do it asynchronously, because the count is dependent of the permission of the user.
+But if it's too time-consuming or too complicated to do it in real-time, a solution would be to do it asynchronously, for each user.
+
 
 ## Objectives
 
@@ -140,17 +145,28 @@ We do a multi-search:
     { "index" : "akeneo_pim_product"}
 ```
 
-For the ES part, the response time is 384ms. 
-I didn't test the scalability of ES. I don't worry about it. ES can, more or less, scale as much as we want (not the case of Mysql without using Mysql cluster).
 
-So, in term of IO, we have the result in less than 500ms. Meaning that we can have the result in 700ms (loading of the kernel, authentication, etc).
+For the ES part, the response time is 200ms for one single request. 
 
+Let's test the scalability with 10 concurrent requests:
+```
+ab -p /var/tmp/categories.sql -H 'cache-control: no-cache' -T application/x-ndjson -c 12 -n 240 "http://127.0.0.1:9200/akeneo_pim_product/pim_catalog_product/_msearch"
+```
 
-Note: 890 direct children in one category is very probably an edge case. So, for most of the cases, we should have far better results. Meaning that we could have a response time in 500 ms very probably.
+It takes 1s to get the response.
+
+It's quite a lot, but I don't worry about it. ES can scale as much as we want (not the case of Mysql without using Mysql cluster). If we have a lot of users, we should have more ES instances.
+To be validated.
+
 
 #### Conclusion
 
+In term of IO, we have the result in less than 500ms. Meaning that we can have the result in 700ms (loading of the kernel, authentication, etc).
+
+890 direct children in one category is very probably an edge case. So, for most of the cases, we should have far better results. Meaning that we could have a response time in less than 500 ms very probably.
+
 For me, this POC is OK. But we will still have big requests with `IN (viewable_category, etc)`. It's time consuming both in Mysql in ES. It could be avoided by the second solution.
+
 
 ### Second one: request all products in a node
 
@@ -161,6 +177,7 @@ Pros:
 
 Cons:
 - functionnal edge case prevent it (due to permissions)
+- costly: need to handle ctaegories differently in Mysql and in ES
 
 With ES, it's possible to request all data in a node by configuring the indexation.
 The idea is to index products with the full path "master/A/B". Then, ES is able to split it and index the product has being part of "master", "master/A", "master/A/B".
@@ -182,5 +199,4 @@ _Do note that a category can be visible but not its parent. This is important._
 
 Actually, this particular case prevent us to to ignore a part of the tree. We have to manage each category individually for th pemrissions.
 
-We are curretly investigating if it's really useful.
-
+We are currently the functionnal need of this use-case. 
