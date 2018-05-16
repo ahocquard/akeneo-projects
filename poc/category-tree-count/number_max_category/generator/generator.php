@@ -17,7 +17,7 @@ $categoriesPerDepth = [];
 $categoriesPerDepth[0] = [];
 foreach (range(1, $numberTree) as $rank) {
     $path = 'node_' . $rank;
-    $categories[$path] = $path;
+    $categories[] = $path;
     $categoriesPerDepth[0][] = $path;
 }
 
@@ -28,7 +28,7 @@ foreach (range(1, $treeDepth) as $depth) {
     foreach ($parentCategories as $parentCategory) {
         foreach (range(1, $numberChildrenPerCategory) as $rank) {
             $path = $parentCategory . '/node_' . $rank;
-            $categories[$path] = $path;
+            $categories[] = $path;
             $categoriesPerDepth[$depth][] = $path;
         }
     }
@@ -41,7 +41,11 @@ $body = '';
 $batchNumber = 0;
 
 for ($i = 0; $i < $numberProducts; $i++) {
-    $productCategories = array_rand($categories, $numberCategoryPerProduct);
+
+    $productCategories = [];
+    for($j = 0; $j < $numberCategoryPerProduct; $j++) {
+        $productCategories[] = $categories[rand(0, $countCategories -1)];
+    }
     $productCategoriesImploded = '"' . implode('","', $productCategories) . '"';
 
     $body .= <<<REQUEST
@@ -53,6 +57,8 @@ REQUEST;
     if (($i + 1) % 50000 === 0) {
         file_put_contents(sprintf('%s/es_categories_%s.txt', $esRequestsDirectory, $batchNumber), $body);
 
+        echo sprintf('%s products created.', $i) . PHP_EOL;
+
         $body = '';
         $batchNumber++;
     }
@@ -61,7 +67,7 @@ REQUEST;
 file_put_contents(sprintf('%s/es_categories_%s.txt', $esRequestsDirectory, $batchNumber), $body);
 
 
-foreach(range(100, 100000, 100) as $numberCategoriesInSelect) {
+foreach(range(100, 100000, 1000) as $numberCategoriesInSelect) {
     $categoriesInSelect = array_rand($categories, $numberCategoriesInSelect);
     $productCategoriesImploded = '"' . implode('","', $categoriesInSelect) . '"';
 
@@ -74,5 +80,3 @@ REQUEST;
 
     file_put_contents(sprintf('%s/es_request_%s.txt', $esRequestsDirectory, $numberCategoriesInSelect), $body);
 }
-
-
