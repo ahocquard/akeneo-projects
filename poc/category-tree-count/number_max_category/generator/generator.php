@@ -5,7 +5,7 @@ $treeDepth = getenv('TREE_DEPTH');
 $numberChildrenPerCategory = getenv('NUMBER_CHILDREN_PER_CATEGORY');
 $numberProducts = getenv('NUMBER_PRODUCTS');
 $numberCategoryPerProduct = getenv('NUMBER_CATEGORY_PER_PRODUCT');
-$esRequestsDirectory = getenv('ES_REQUESTS_DIRECTORY');
+$esRequestsDirectory = getenv('ES_REQUEST_DIRECTORY');
 
 if (!file_exists($esRequestsDirectory)) {
     mkdir($esRequestsDirectory, 0777, true);
