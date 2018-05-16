@@ -67,11 +67,14 @@ REQUEST;
 file_put_contents(sprintf('%s/es_categories_%s.txt', $esRequestsDirectory, $batchNumber), $body);
 
 
-foreach(range(100, 100000, 1000) as $numberCategoriesInSelect) {
+foreach(range(10000, 1000000, 10000) as $numberCategoriesInSelect) {
     $categoriesInSelect = array_rand($categories, $numberCategoriesInSelect);
-    $productCategoriesImploded = '"' . implode('","', $categoriesInSelect) . '"';
 
-    file_put_contents(sprintf('%s/es_request_%s.txt', $esRequestsDirectory, $numberCategoriesInSelect), $body);
+    $productCategories = [];
+    for($j = 0; $j < $numberCategoriesInSelect; $j++) {
+        $productCategories[] = $categories[rand(0, $countCategories -1)];
+    }
+    $productCategoriesImploded = '"' . implode('","', $productCategories) . '"';
 
     $body = <<<REQUEST
     {"query" : {"constant_score": {"filter": {"terms": { "categories" : [${productCategoriesImploded}]}}}}}
