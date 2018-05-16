@@ -60,3 +60,19 @@ REQUEST;
 
 file_put_contents(sprintf('%s/es_categories_%s.txt', $esRequestsDirectory, $batchNumber), $body);
 
+
+foreach(range(100, 100000, 100) as $numberCategoriesInSelect) {
+    $categoriesInSelect = array_rand($categories, $numberCategoriesInSelect);
+    $productCategoriesImploded = '"' . implode('","', $categoriesInSelect) . '"';
+
+    file_put_contents(sprintf('%s/es_request_%s.txt', $esRequestsDirectory, $numberCategoriesInSelect), $body);
+
+    $body = <<<REQUEST
+    {"query" : {"constant_score": {"filter": {"terms": { "categories" : [${productCategoriesImploded}]}}}}}
+    
+REQUEST;
+
+    file_put_contents(sprintf('%s/es_request_%s.txt', $esRequestsDirectory, $numberCategoriesInSelect), $body);
+}
+
+
