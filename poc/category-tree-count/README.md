@@ -159,6 +159,29 @@ It's quite a lot, but I don't worry about it. ES can scale as much as we want (n
 To be validated.
 
 
+#### Go further: ES query response time
+
+I tested queries in ES with big `IN (category_1, category_2)` until 1 million categories.
+Here are the results.
+
+![Alt text](number_max_category/graphs/output_10million_product.png?raw=true "Number max categories in clause until 1 million categories")
+
+I did the same but with more realistics numbers, until 50 000 categories.
+
+![Alt text](number_max_category/graphs/results_10_million_products_detailed.png?raw=true "Number max categories in clause until 50000 categories")
+
+Also, I did a test to know the response time, given 5000, 20 000 and 30 000 categories.
+Until 50 millions of products.
+
+![](number_max_category/graphs/output_5000_categories.png?raw=true "Response time/number of products")
+
+![Alt text](number_max_category/graphs/output_10000_categories.png?raw=true "Response time/number of products")
+
+![Alt text](number_max_category/graphs/output_30000_categories.png?raw=true "Response time/number of products")
+
+Results are good enough.
+
+
 #### Conclusion
 
 In term of IO, we have the result in less than 500ms. Meaning that we can have the result in 700ms (loading of the kernel, authentication, etc).
