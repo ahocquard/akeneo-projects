@@ -161,7 +161,7 @@ To be validated.
 
 #### Go further: ES query response time
 
-I tested queries in ES with big `IN (category_1, category_2)` until 1 million categories.
+I tested queries in ES with big `IN (category_1, category_2)` until 1 million categories. There are 10 millions products.
 Here are the results.
 
 ![Alt text](number_max_category/graphs/output_10million_product.png?raw=true "Number max categories in clause until 1 million categories")
