@@ -8,11 +8,11 @@ workflows:
 #                pattern: "^tst.+$"
 #                value: << pipeline.git.branch >>
         jobs:
-            - all_tests_assets:
+            - all_tests_dqi:
                 filters:
                     branches:
                         only:
                             - /weasel-.*/
             - pull_request_success:
                   requires:
-                      - all_tests_assets
+                      - all_tests_dqi
