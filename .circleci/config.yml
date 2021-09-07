@@ -1,0 +1,33 @@
+version: 2.1
+
+setup: true
+
+orbs:
+    continuation: circleci/continuation@0.2.0
+
+parameters:
+    scheduled-workflow:
+        type: string
+        default: "not_scheduled"
+
+jobs:
+    merge_config:
+        executor: continuation/default
+        steps:
+            - checkout
+            - run:
+                  name: Install yq
+                  command: |
+                      wget https://github.com/mikefarah/yq/releases/download/3.3.1/yq_linux_386
+                      sudo mv yq_linux_386 /usr/local/bin/yq
+                      sudo chmod +x /usr/local/bin/yq
+            - run: yq m .circleci/*/*/*.yml > .circleci/merged_config.yml
+            - continuation/continue:
+                  configuration_path: .circleci/merged_config.yml
+
+workflows:
+    version: 2
+
+    merge_config_workflow:
+        jobs:
+            - merge_config

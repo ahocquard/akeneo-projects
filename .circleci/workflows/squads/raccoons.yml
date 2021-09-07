@@ -1,0 +1,14 @@
+version: 2.1
+workflows:
+    version: 2
+
+    raccoon_workflow:
+        jobs:
+            - all_tests_dqi:
+                filters:
+                    branches:
+                      only:
+                          - /raccoon.*/
+            - pull_request_success:
+                requires:
+                    - all_tests_dqi

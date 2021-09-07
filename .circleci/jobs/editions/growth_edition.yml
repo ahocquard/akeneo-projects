@@ -1,0 +1,8 @@
+jobs:
+    deploy_growth_edition:
+        docker:
+            - image: alpine/git
+        steps:
+            - run:
+                  name: Success
+                  command: echo "Deploy GE"

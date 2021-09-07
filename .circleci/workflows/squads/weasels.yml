@@ -1,0 +1,18 @@
+version: 2.1
+workflows:
+    version: 2
+
+    weasels_workflow:
+#        when:
+#            matches:
+#                pattern: "^tst.+$"
+#                value: << pipeline.git.branch >>
+        jobs:
+            - all_tests_assets:
+                filters:
+                    branches:
+                        only:
+                            - /weasel-.*/
+            - pull_request_success:
+                  requires:
+                      - all_tests_assets
