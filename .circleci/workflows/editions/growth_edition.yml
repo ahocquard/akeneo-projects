@@ -10,8 +10,4 @@ workflows:
         when:
             equals: ["nightly_ce", << pipeline.parameters.scheduled-workflow >>]
         jobs:
-            - deploy_growth_edition:
-                  filters:
-                      branches:
-                          only:
-                              - /test_pr/
+            - deploy_growth_edition
