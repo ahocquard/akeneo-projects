@@ -1,0 +1,8 @@
+jobs:
+    pull_request_success:
+        docker:
+            - image: alpine/git
+        steps:
+            - run:
+                  name: Success
+                  command: echo "The build has run with success! Let's merge :)"

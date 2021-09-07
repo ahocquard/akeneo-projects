@@ -1,0 +1,16 @@
+jobs:
+    unit_tests_assets:
+        docker:
+            - image: alpine/git
+        steps:
+            - run:
+                  name: Success
+                  command: echo "Assets tests OK"
+
+    all_tests_assets:
+        docker:
+            - image: alpine/git
+        steps:
+            - run:
+                  name: Success
+                  command: sleep 20 && echo "Assets ALL tests OK"

@@ -1,0 +1,17 @@
+parameters:
+    scheduled-workflow:
+        type: string
+        default: "not_scheduled"
+
+workflows:
+    version: 2
+
+    deploy_growth_edition:
+        when:
+            equals: ["nightly_ce", << pipeline.parameters.scheduled-workflow >>]
+        jobs:
+            - deploy_growth_edition:
+                  filters:
+                      branches:
+                          only:
+                              - /test_pr/
