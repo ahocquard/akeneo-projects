@@ -1,5 +1,5 @@
 jobs:
-    unit_tests_ref_entity:
+    ref_entities_back:
         docker:
             - image: alpine/git
         steps:
@@ -7,7 +7,7 @@ jobs:
                   name: Success
                   command: echo "Ref entity unit tests OK"
 
-    all_tests_ref_entity:
+    ref_entities_front:
         docker:
             - image: alpine/git
         steps:

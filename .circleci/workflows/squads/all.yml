@@ -1,0 +1,12 @@
+version: 2.1
+workflows:
+    version: 2
+
+    all_tests_workflow:
+        jobs:
+            - all_tests_assets
+            - all_tests_dqi
+            - pull_request_success:
+                requires:
+                    - all_tests_assets
+                    - all_tests_dqi
