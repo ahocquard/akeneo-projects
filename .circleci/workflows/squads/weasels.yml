@@ -8,11 +8,15 @@ workflows:
 #                pattern: "^tst.+$"
 #                value: << pipeline.git.branch >>
         jobs:
+            - launch_weasel?:
+                  type: approval
+                  filters:
+                      branches:
+                          only:
+                              - /weasel.*/
             - all_tests_dqi:
-                filters:
-                    branches:
-                        only:
-                            - /weasel-.*/
+                  requires:
+                      - launch_weasel?
             - pull_request_success:
                   requires:
                       - all_tests_dqi

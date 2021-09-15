@@ -4,8 +4,18 @@ workflows:
 
     all_tests_workflow:
         jobs:
-            - all_tests_assets
-            - all_tests_dqi
+            - launch_all?:
+                type: approval
+                filters:
+                    branches:
+                        ignore:
+                            - master
+            - all_tests_assets:
+                requires:
+                    - launch_all?
+            - all_tests_dqi:
+                requires:
+                    - launch_all?
             - pull_request_success:
                 requires:
                     - all_tests_assets
