@@ -1,7 +1,7 @@
 name: Nightly CE
 on:
     schedule:
-        - cron: '* * * * *'
+        - cron: '0 * * * *'
 
 jobs:
     nightly_ce:
