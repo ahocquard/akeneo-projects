@@ -18,10 +18,29 @@ jobs:
             - run:
                   name: Install yq
                   command: |
-                      wget https://github.com/mikefarah/yq/releases/download/3.3.1/yq_linux_386
+                      wget https://github.com/mikefarah/yq/releases/download/v4.13.2/yq_linux_386
                       sudo mv yq_linux_386 /usr/local/bin/yq
                       sudo chmod +x /usr/local/bin/yq
-            - run: yq m .circleci/*/*/*.yml > .circleci/merged_config.yml
+            - run:
+                  name: Merge all files
+                  command: |
+                      yq eval-all '. as $item ireduce ({}; . *+ $item )' .circleci/*/*/*.yml > .circleci/merged_config.yml
+                      cat .circleci/merged_config.yml
+            - run:
+                  name: Add "feature_success" job, green if all features are green
+                  command: |
+                      yq eval-all --inplace '.workflows.serenity.jobs += {"feature_success" : {"requires" : .workflows.serenity.jobs.[].feature_success.name | select(length!=0) as $item ireduce ([]; . + $item)}}' .circleci/merged_config.yml
+                      cat .circleci/merged_config.yml
+            - run:
+                  name: Feature workflow merged into nightly
+                  command: |
+                      yq eval-all --inplace '
+                        .workflows.serenity_pull_request.jobs += .workflows.serenity.jobs |
+                        .workflows.serenity_nightly.jobs += .workflows.serenity.jobs |
+                        del(.workflows.serenity)
+                      '  .circleci/merged_config.yml
+                      cat .circleci/merged_config.yml
+
             - continuation/continue:
                   configuration_path: .circleci/merged_config.yml
 

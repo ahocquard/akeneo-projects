@@ -1,16 +1,21 @@
 jobs:
-    unit_tests_dqi:
-        docker:
-            - image: alpine/git
-        steps:
-            - run:
-                  name: Success
-                  command: echo "DQI unit tests OK"
-
-    all_tests_dqi:
+    dqi_tests:
         docker:
             - image: alpine/git
         steps:
             - run:
                   name: Success
                   command: echo "<< pipeline.parameters.scheduled-workflow >> DQI all"
+
+workflows:
+    version: 2
+
+    serenity:
+        jobs:
+            - dqi_tests:
+                  requires:
+                      - build_serenity
+            - feature_success:
+                  name: dqi_success
+                  requires:
+                      - dqi_tests

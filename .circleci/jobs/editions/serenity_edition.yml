@@ -1,0 +1,24 @@
+jobs:
+    checkout_serenity:
+        docker:
+            -   image: alpine/git
+        steps:
+            -   run:
+                    name: Success
+                    command: echo "Build Serenity + << pipeline.parameters.scheduled-workflow >>"
+
+    build_serenity:
+        docker:
+            - image: alpine/git
+        steps:
+            - run:
+                  name: Success
+                  command: echo "Build Serenity"
+
+    deploy_serenity:
+        docker:
+            - image: alpine/git
+        steps:
+            - run:
+                  name: Success
+                  command: echo "Deploy Serenity"

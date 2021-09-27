@@ -6,8 +6,8 @@ parameters:
 workflows:
     version: 2
 
-    deploy_growth_edition:
+    growth_edition_nightly:
         when:
-            equals: ["nightly_ce", << pipeline.parameters.scheduled-workflow >>]
+            equal: [ "growth_edition_nightly", << pipeline.parameters.scheduled-workflow >> ]
         jobs:
             - deploy_growth_edition

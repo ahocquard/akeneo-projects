@@ -14,3 +14,20 @@ jobs:
             - run:
                   name: Success
                   command: echo "Ref entity ALL tests OK"
+
+workflows:
+    version: 2
+
+    serenity:
+        jobs:
+            - ref_entities_back:
+                  requires:
+                      - build_serenity
+            - ref_entities_front:
+                  requires:
+                      - build_serenity
+            - feature_success:
+                  name: ref_entities_success
+                  requires:
+                      - ref_entities_back
+                      - ref_entities_front
