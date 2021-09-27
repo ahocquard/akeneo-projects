@@ -11,9 +11,9 @@ workflows:
                           only:
                               - /raccoon.*/
 
-            - all_tests_assets:
+            - assets_unit_tests:
                 requires:
                     - launch_raccoon?
-            - pull_request_success:
+            - feature_success:
                 requires:
-                    - all_tests_assets
+                    - assets_unit_tests

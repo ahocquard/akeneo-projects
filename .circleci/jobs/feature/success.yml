@@ -1,5 +1,5 @@
 jobs:
-    pull_request_success:
+    feature_success:
         docker:
             - image: alpine/git
         steps:

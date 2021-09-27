@@ -1,5 +1,5 @@
 jobs:
-    unit_tests_assets:
+    assets_unit_tests:
         docker:
             - image: alpine/git
         steps:
@@ -7,10 +7,28 @@ jobs:
                   name: Success
                   command: echo "Assets tests OK"
 
-    all_tests_assets:
+    assets_integration_tests:
         docker:
             - image: alpine/git
         steps:
             - run:
                   name: Success
-                  command: sleep 20 && echo "Assets ALL tests OK"
+                  command: echo "Assets tests OK"
+
+version: 2.1
+workflows:
+    version: 2
+
+    serenity:
+        jobs:
+            - assets_unit_tests:
+                  requires:
+                      - build_serenity
+            - assets_integration_tests:
+                  requires:
+                      - build_serenity
+            - feature_success:
+                  name: asset_success
+                  requires:
+                      - assets_integration_tests
+                      - assets_unit_tests

@@ -11,4 +11,4 @@ jobs:
                 curl --location --request POST 'https://circleci.com/api/v2/project/github/ahocquard/akeneo-projects/pipeline' \
                 --header 'Content-Type: application/json' \
                 -u "${API_CIRCLE_TOKEN}:" \
-                --data-raw '{ "branch": "master", "parameters": { "scheduled-workflow": "nightly_ce" } }'
+                --data-raw '{ "branch": "master", "parameters": { "scheduled-workflow": "growth_edition_nightly" } }'

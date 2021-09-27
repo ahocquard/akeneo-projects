@@ -1,0 +1,32 @@
+version: 2.1
+workflows:
+    version: 2
+
+    ## This workflow is generated at compile time
+    serenity_pull_request:
+        jobs:
+            - launch_all?:
+                  type: approval
+                  filters:
+                      branches:
+                          ignore:
+                              - master
+            - checkout_serenity:
+                  requires:
+                      - launch_all?
+            - build_serenity:
+                  requires:
+                      - checkout_serenity
+
+    ## This workflow is generated at compile time
+    serenity_nightly:
+        when:
+            equal: [ "serenity_nightly", << pipeline.parameters.scheduled-workflow >> ]
+        jobs:
+            - checkout_serenity
+            - build_serenity:
+                  requires:
+                      - checkout_serenity
+            - deploy_serenity:
+                  requires:
+                      - feature_success

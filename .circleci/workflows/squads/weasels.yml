@@ -14,9 +14,9 @@ workflows:
                       branches:
                           only:
                               - /weasel.*/
-            - all_tests_dqi:
+            - dqi_tests:
                   requires:
                       - launch_weasel?
-            - pull_request_success:
+            - feature_success:
                   requires:
-                      - all_tests_dqi
+                      - dqi_tests
