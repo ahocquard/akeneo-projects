@@ -8,8 +8,9 @@ jobs:
                   command: echo "Assets tests OK"
 
     assets_integration_tests:
-        docker:
-            - image: alpine/git
+        machine:
+            image: ubuntu-2004:202010-01
+        resource_class: small
         steps:
             - run:
                   name: Success
