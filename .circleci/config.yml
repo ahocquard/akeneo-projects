@@ -1,9 +1,15 @@
 version: 2.1
 
+slack-fail-post-step: &slack-fail-post-step
+  post-steps:
+    - slack/status:
+        fail_only: true
+
 setup: true
 
 orbs:
     continuation: circleci/continuation@0.2.0
+    slack: circleci/slack@3.4.2
 
 parameters:
     scheduled-workflow:
